@@ -28,6 +28,9 @@ export const App = () => {
         setPageAmount(Math.ceil(response.data.totalHits / 12));
         setGallery(state => [...state, ...response.data.hits]);
         setStatus('resolved');
+        if (response.data.hits.length === 0) {
+          renderInfo(`There are no pictures for ${search}`)
+        }
       } catch (error) {
         setError(error);
         setStatus('rejected');
@@ -56,9 +59,6 @@ export const App = () => {
 
       {<ImageGallery gallery={gallery} />}
       {status === 'pending' && <Loader />}
-      {status === 'resolved' &&
-        gallery.length === 0 &&
-        renderInfo(`There are no pictures for ${search}`)}
       {status === 'rejected' && renderError(error.message)}
       {gallery.length >= 12 && pageCount < pageAmount && (
         <Button onLoadMore={handleLoadMore} />
