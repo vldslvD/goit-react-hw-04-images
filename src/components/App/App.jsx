@@ -22,17 +22,16 @@ export const App = () => {
 
   useEffect(() => {
     async function startFetching() {
-        try {
-          setStatus('pending');
-          const response = await getPictures(search, pageCount);
-          setPageAmount(Math.ceil(response.data.totalHits / 12));
-          setGallery(state => [...state, ...response.data.hits]);
-          setStatus('resolved');
-          
-        } catch (error) {
-          setError(error);
-          setStatus('rejected');
-        }
+      try {
+        setStatus('pending');
+        const response = await getPictures(search, pageCount);
+        setPageAmount(Math.ceil(response.data.totalHits / 12));
+        setGallery(state => [...state, ...response.data.hits]);
+        setStatus('resolved');
+      } catch (error) {
+        setError(error);
+        setStatus('rejected');
+      }
     }
     startFetching();
   }, [search, pageCount]);
@@ -43,7 +42,7 @@ export const App = () => {
   const handleLoadMore = () => {
     setPageCount(state => state + 1);
     scroll.scrollToBottom();
-    };
+  };
 
   const renderError = message => {
     toast.error(message);
@@ -54,14 +53,14 @@ export const App = () => {
   return (
     <Container>
       <Searchbar onSubmit={handleSearch} />
-      
+
       {<ImageGallery gallery={gallery} />}
       {status === 'pending' && <Loader />}
       {status === 'resolved' &&
         gallery.length === 0 &&
         renderInfo(`There are no pictures for ${search}`)}
       {status === 'rejected' && renderError(error.message)}
-      {(gallery.length >= 12) && pageCount < pageAmount && (
+      {gallery.length >= 12 && pageCount < pageAmount && (
         <Button onLoadMore={handleLoadMore} />
       )}
       <ToastContainer />
