@@ -18,6 +18,7 @@ export const App = () => {
 
   useEffect(() => {
     setGallery([]);
+    
   }, [search]);
 
   useEffect(() => {
@@ -40,7 +41,9 @@ export const App = () => {
   }, [search, pageCount]);
 
   const handleSearch = newSearch => {
+    setPageCount(1);
     setSearch(newSearch);
+    
   };
   const handleLoadMore = () => {
     setPageCount(state => state + 1);
